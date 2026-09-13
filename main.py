@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from routers import revenue, items, peak_hours, today, demand
+from routers import revenue, items, peak_hours, today, demand, categories, tables, products
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,6 +16,9 @@ app.include_router(items.router,      prefix="/analytics")
 app.include_router(peak_hours.router, prefix="/analytics")
 app.include_router(today.router,      prefix="/analytics")
 app.include_router(demand.router,     prefix="/predict")
+app.include_router(categories.router, prefix="/analytics")
+app.include_router(tables.router,     prefix="/analytics")
+app.include_router(products.router,   prefix="/analytics")
 
 # ── Health ────────────────────────────────────────────────────────────────────
 @app.get("/health")

@@ -2,12 +2,13 @@ from fastapi import APIRouter
 from bson import ObjectId
 from db import db, cache
 import json
-
+from datetime import datetime
 router = APIRouter()
 
 @router.get("/peak-hours/{seller_id}")
 async def peak_hours(seller_id: str):
     key    = f"analytics:peak-hours:{seller_id}"
+    #Redis cache
     cached = await cache.get(key)
     if cached:
         return {"data": json.loads(cached), "cached": True}
@@ -21,8 +22,7 @@ async def peak_hours(seller_id: str):
         {"$sort": {"_id": 1}}
     ]
     result = await db.orders.aggregate(pipeline).to_list(None)
-
-    from datetime import datetime
+    
     now        = datetime.now()
     end_of_day = now.replace(hour=23, minute=59, second=59)
     ttl        = int((end_of_day - now).total_seconds())
