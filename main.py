@@ -10,6 +10,16 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Ordash Analytics", lifespan=lifespan)
 
+# ── Root ──────────────────────────────────────────────────────────────────────
+@app.get("/")
+def root():
+    return {
+        "service": "Ordash Analytics 🍽️",
+        "status": "up and running",
+        "message": "Nothing to see here — go order some food 🚀",
+        "docs": "/docs",
+    }
+
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(revenue.router,    prefix="/analytics")
 app.include_router(items.router,      prefix="/analytics")
@@ -24,3 +34,8 @@ app.include_router(products.router,   prefix="/analytics")
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+# ── Keep-alive ping ───────────────────────────────────────────────────────────
+@app.get("/ping")
+def ping():
+    return {"status": "pong"}
