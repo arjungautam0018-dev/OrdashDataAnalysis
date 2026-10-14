@@ -31,11 +31,11 @@ app.include_router(tables.router,     prefix="/analytics")
 app.include_router(products.router,   prefix="/analytics")
 
 # ── Health ────────────────────────────────────────────────────────────────────
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"status": "ok"}
 
 # ── Keep-alive ping ───────────────────────────────────────────────────────────
-@app.get("/ping")
+@app.api_route("/ping", methods=["GET", "HEAD"])
 def ping():
     return {"status": "pong"}
